@@ -4,50 +4,37 @@ Rede social acadêmica para estudantes de Ciência da Computação da Universida
 
 - **Backend:** Java 21, Spring Boot 4, Spring Security (JWT), Spring Data JPA, Gradle.
 - **Frontend:** React 19, Vite, Tailwind.
-- **Banco:** MySQL 8.4 instalado localmente.
+- **Banco:** MySQL 8.4.
+- **Execução:** Docker Compose (MySQL + backend + frontend).
 
 ## Requisitos
 
-JDK 21, Node.js 20.19+ e MySQL Server 8.4. O MySQL Workbench é opcional: é só uma interface para o banco.
+Docker Desktop (com Docker Compose). Não é preciso instalar JDK, Node.js nem MySQL.
 
 ## Como rodar
 
-1. **Variáveis de ambiente:** copie `.env.example` para `.env` na raiz e preencha todos os valores. O `JWT_SECRET` precisa ter pelo menos 32 caracteres. O `.env` não é versionado.
-2. **Banco:** com o MySQL rodando, crie o banco e o usuário com os mesmos valores do `.env`:
-
-   ```sql
-   CREATE DATABASE <MYSQL_DATABASE> CHARACTER SET utf8mb4;
-   CREATE USER '<MYSQL_USER>'@'localhost' IDENTIFIED BY '<MYSQL_PASSWORD>';
-   GRANT ALL PRIVILEGES ON <MYSQL_DATABASE>.* TO '<MYSQL_USER>'@'localhost';
-   ```
-
-3. **Backend** (as tabelas são criadas pelo Hibernate):
+1. **Variáveis de ambiente:** copie `.env.example` para `.env` na raiz e preencha os valores. O `JWT_SECRET` precisa ter pelo menos 32 caracteres. O `.env` não é versionado.
+2. **Subir tudo** (a partir da raiz do projeto):
 
    ```powershell
-   cd backend
-   .\gradlew.bat bootRun
+   docker compose up --build
    ```
 
-   A API fica em `http://localhost:8080/api`. A recuperação de senha ainda está em desenvolvimento no app.
-4. **Frontend:** crie `frontend/.env.local` com `VITE_API_BASE_URL=http://localhost:8080/api` e rode:
+   - Frontend: `http://localhost:5173`
+   - API: `http://localhost:8080/api`
+   - MySQL (para o Workbench): `127.0.0.1:3307`, com o usuário e a senha do `.env`
 
-   ```powershell
-   cd frontend
-   npm install
-   npm run dev
-   ```
+   O banco, o usuário e as tabelas são criados automaticamente. A recuperação de senha ainda está em desenvolvimento no app.
+3. **Parar:** `docker compose down` (mantém o banco) ou `docker compose down -v` (apaga o banco).
 
-   Abra `http://localhost:5173`. Reinicie o `npm run dev` se mudar o `.env.local`.
-
-O passo a passo detalhado, com a instalação do MySQL e do Workbench, está no `companion-local.txt` (arquivo privado, fora do Git).
+O passo a passo detalhado está no `companion-local.txt` (arquivo privado, fora do Git).
 
 ## Dados de exemplo
 
-Para ter usuários, dúvidas, respostas, curtidas e seguidores prontos, suba o backend com o perfil `seed`. Ele aplica as migrações Flyway de `backend/src/main/resources/db/seed`:
+Para ter usuários, dúvidas, respostas, curtidas e seguidores prontos, defina `SPRING_PROFILES_ACTIVE=seed` no `.env` e recrie o backend. O perfil aplica as migrações Flyway de `backend/src/main/resources/db/seed`:
 
 ```powershell
-cd backend
-.\gradlew.bat bootRun --args="--spring.profiles.active=seed"
+docker compose up -d --force-recreate backend
 ```
 
 | Migração | O que cria |
@@ -60,10 +47,10 @@ Todos os usuários (como `ana.exemplo@edu.unifor.br` ou o username `anabeatriz`)
 
 ## Primeiro administrador
 
-Cadastros públicos sempre recebem o papel `USER`. Cadastre a conta pelo app e promova-a no banco:
+Cadastros públicos sempre recebem o papel `USER`. Cadastre a conta pelo app (com e-mail `@edu.unifor.br`) e promova-a no banco:
 
-```sql
-UPDATE users SET role = 'ADMIN' WHERE id = X;
+```powershell
+docker compose exec db mysql -u<MYSQL_USER> -p<MYSQL_PASSWORD> <MYSQL_DATABASE> -e "UPDATE users SET role='ADMIN' WHERE id=X;"
 ```
 
 Entre de novo para o papel valer no token.
