@@ -20,7 +20,11 @@ function validateEmail(value) {
         return 'Por favor, insira um endereço de e-mail válido.'
     }
 
-    return ''   
+    if (!email.toLowerCase().endsWith('@edu.unifor.br')) {
+        return 'Use seu e-mail institucional (@edu.unifor.br).'
+    }
+
+    return ''
 }
 
 function RegisterPage() {

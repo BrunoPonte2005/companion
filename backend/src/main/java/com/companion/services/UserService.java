@@ -37,6 +37,8 @@ import java.util.UUID;
 @Service
 public class UserService {
 
+    private static final String INSTITUTIONAL_EMAIL_DOMAIN = "@edu.unifor.br";
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticatedUserService authenticatedUserService;
@@ -66,6 +68,9 @@ public class UserService {
     @Transactional
     public User register(UserRegistrationRequestDTO request) {
         String email = normalizeEmail(request.email());
+        if (!email.toLowerCase().endsWith(INSTITUTIONAL_EMAIL_DOMAIN)) {
+            throw new BadRequestException("Use seu e-mail institucional (" + INSTITUTIONAL_EMAIL_DOMAIN + ")");
+        }
         if (userRepository.existsByEmailIgnoreCase(email)) {
             throw new DuplicateResourceException("Já existe uma conta com esse e-mail");
         }
