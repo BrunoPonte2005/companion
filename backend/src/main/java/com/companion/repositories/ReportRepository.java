@@ -7,6 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 import java.util.Optional;
 
 public interface ReportRepository extends JpaRepository<Report, Long> {
@@ -22,4 +26,15 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     @EntityGraph(attributePaths = {"reporter", "reviewedBy", "post", "postComment", "postComment.post"})
     Page<Report> findByStatusOrderByCreatedAtAsc(ReportStatus status, Pageable pageable);
+
+    // Sem paginação, para a exportação CSV.
+    @EntityGraph(attributePaths = {"reporter", "reviewedBy", "post", "postComment", "postComment.post"})
+    @Query("select r from Report r order by r.createdAt desc, r.id desc")
+    List<Report> findAllForExport();
+
+    @EntityGraph(attributePaths = {"reporter", "reviewedBy", "post", "postComment", "postComment.post"})
+    @Query("select r from Report r where r.status = :status order by r.createdAt desc, r.id desc")
+    List<Report> findAllForExportByStatus(@Param("status") ReportStatus status);
+
+    long countByStatus(ReportStatus status);
 }
