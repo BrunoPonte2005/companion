@@ -1,0 +1,28 @@
+/* Cores do gráfico de setores: as 5 primeiras posições da paleta categórica
+   validada (ordem fixa, nunca reordenada). O tema escuro usa passos próprios. */
+.donut-chart {
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+  --donut-track: rgb(0 0 0 / 0.08);
+}
+
+:root[data-theme='dark'] .donut-chart {
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+  --donut-track: rgb(255 255 255 / 0.1);
+}
+
+.donut-chart .donut-segment {
+  transition: opacity 120ms ease;
+  outline: none;
+}
+
+.donut-chart .donut-segment:focus-visible {
+  stroke-width: 32;
+}

@@ -23,6 +23,7 @@ import SupportPage from './pages/support/SupportPage.jsx'
 import TermsPage from './pages/terms/TermsPage.jsx'
 import MyProfilePage from './pages/profile/MyProfilePage.jsx'
 import EditProfilePage from './pages/profile/EditProfilePage.jsx'
+import AdminPage from './pages/admin/AdminPage.jsx'
 import RequireAuth from './components/common/RequireAuth.jsx'
 
 // Endereço antigo de uma dúvida: agora ela abre em janela sobre o feed.
@@ -62,6 +63,10 @@ function App() {
 
         <Route path="/notificacoes" element={<FeedLayout />}>
           <Route index element={<NotificationsPage />} />
+        </Route>
+
+        <Route path="/admin" element={<FeedLayout />}>
+          <Route index element={<AdminPage />} />
         </Route>
 
         <Route path="/configuracoes" element={<FeedLayout />}>

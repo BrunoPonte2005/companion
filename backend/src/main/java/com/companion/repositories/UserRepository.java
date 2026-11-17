@@ -69,4 +69,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
                or lower(coalesce(u.username, '')) like lower(concat('%', :query, '%'))
             """)
     Page<User> searchAdmin(@Param("query") String query, Pageable pageable);
+
+    // Estatísticas do painel de administração.
+    long countByStatusNot(UserStatus status);
+
+    long countByStatus(UserStatus status);
+
+    long countByStatusNotAndCreatedAtGreaterThanEqual(UserStatus status, java.time.LocalDateTime since);
 }

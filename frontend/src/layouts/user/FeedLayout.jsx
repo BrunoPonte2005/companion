@@ -210,13 +210,17 @@ function FeedLayout() {
   // Denúncias aguardando análise (só administração e moderação): aviso na navegação.
   const { count: pendingReportCount, refresh: refreshPendingReports } =
     usePendingReports(canModerate)
-  const navItems = canModerate
-    ? [
-        ...navigationItems.slice(0, 3),
-        { to: '/notificacoes', label: 'Notificações', icon: 'bi-bell', badge: pendingReportCount },
-        ...navigationItems.slice(3),
-      ]
-    : navigationItems
+  // Admin fica em primeiro e em destaque, só para administração.
+  const navItems = [
+    ...(user?.role === 'ADMIN'
+      ? [{ to: '/admin', label: 'Admin', icon: 'bi-speedometer2' }]
+      : []),
+    ...navigationItems.slice(0, 3),
+    ...(canModerate
+      ? [{ to: '/notificacoes', label: 'Notificações', icon: 'bi-bell', badge: pendingReportCount }]
+      : []),
+    ...navigationItems.slice(3),
+  ]
 
   const postActions = useMemo(
     () => ({ canModerate, removedPostIds, deletePost: removePost, deleteReply: removeReply }),

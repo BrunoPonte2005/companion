@@ -62,4 +62,18 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             group by p.author.id
             """)
     List<UserCountProjection> countActiveByAuthorIds(@Param("userIds") Collection<Long> userIds);
+
+    // Estatísticas do painel de administração.
+    long countByDeletedAtIsNull();
+
+    long countByDeletedAtIsNullAndCreatedAtGreaterThanEqual(LocalDateTime since);
+
+    @Query("""
+            select count(p) from Post p
+            where p.deletedAt is null
+              and not exists (
+                select 1 from PostComment pc
+                where pc.post = p and pc.deletedAt is null)
+            """)
+    long countActiveWithoutReplies();
 }

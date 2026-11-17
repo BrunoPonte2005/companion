@@ -40,4 +40,18 @@ public interface PostCommentRepository extends JpaRepository<PostComment, Long> 
             group by pc.post.id
             """)
     List<PostCountProjection> countActiveByPostIds(@Param("postIds") Collection<Long> postIds);
+
+    // Estatísticas do painel de administração.
+    long countByDeletedAtIsNull();
+
+    // Pessoas que responderam ao menos uma dúvida de outra pessoa (ainda
+    // publicada). Respostas à própria dúvida e contas excluídas não contam.
+    @Query("""
+            select count(distinct pc.author.id) from PostComment pc
+            where pc.deletedAt is null
+              and pc.post.deletedAt is null
+              and pc.author.id <> pc.post.author.id
+              and pc.author.status <> com.companion.enums.UserStatus.DELETED
+            """)
+    long countDistinctAnswerers();
 }
