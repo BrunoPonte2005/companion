@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import BackLink from '../../components/common/BackLink.jsx'
 import FaqItem from '../../components/common/FaqItem.jsx'
 import OptionList from '../../components/common/OptionList.jsx'
@@ -68,10 +69,17 @@ function SupportPage() {
             Ainda precisa de ajuda?
           </h2>
           <p className="mt-0.5 text-xs leading-relaxed text-companion-muted">
-            O contato direto com a equipe do Companion ainda não está
-            disponível. Enquanto isso, consulte as dúvidas frequentes ou use a
-            denúncia para avisar a moderação sobre conteúdos inadequados.
+            Consulte as dúvidas frequentes e, se não resolver, envie um ticket
+            para a equipe do Companion. Para conteúdos inadequados, use a
+            denúncia na própria dúvida ou resposta.
           </p>
+          <Link
+            to="/faq"
+            className="mt-2 inline-flex items-center gap-2 text-sm font-bold text-companion-brand hover:underline"
+          >
+            <i className="bi bi-send" aria-hidden="true" />
+            Enviar um ticket
+          </Link>
         </div>
       </section>
     </section>

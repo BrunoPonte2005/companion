@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import BackLink from '../../components/common/BackLink.jsx'
 import FaqItem from '../../components/common/FaqItem.jsx'
+import TicketSection from '../../components/support/TicketSection.jsx'
 import { getApiErrorMessage } from '../../services/apiError.js'
 import { getFaqs } from '../../services/faqService.js'
 
@@ -73,6 +74,8 @@ function FaqPage() {
           </p>
         )}
       </section>
+
+      <TicketSection />
     </section>
   )
 }

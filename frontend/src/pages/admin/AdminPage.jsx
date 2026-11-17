@@ -3,15 +3,17 @@ import { Navigate } from 'react-router'
 import { useAuth } from '../../hooks/useAuth.js'
 import AdminOverview from './AdminOverview.jsx'
 import AdminPostsTab from './AdminPostsTab.jsx'
+import AdminTicketsTab from './AdminTicketsTab.jsx'
 import AdminUsersTab from './AdminUsersTab.jsx'
 
 const tabs = [
   { id: 'overview', label: 'Visão geral', icon: 'bi-pie-chart' },
   { id: 'users', label: 'Alunos', icon: 'bi-people' },
   { id: 'posts', label: 'Dúvidas', icon: 'bi-question-circle' },
+  { id: 'tickets', label: 'Tickets', icon: 'bi-life-preserver' },
 ]
 
-// Painel de administração: números em gráficos, gerenciar alunos e dúvidas e
+// Painel de administração: números em gráficos, gerenciar alunos, dúvidas e tickets e
 // exportar relatórios. Quem não é administrador volta ao feed (o backend
 // também confere a permissão).
 function AdminPage() {
@@ -65,6 +67,7 @@ function AdminPanel() {
         {tab === 'overview' && <AdminOverview />}
         {tab === 'users' && <AdminUsersTab />}
         {tab === 'posts' && <AdminPostsTab />}
+        {tab === 'tickets' && <AdminTicketsTab />}
       </div>
     </section>
   )
