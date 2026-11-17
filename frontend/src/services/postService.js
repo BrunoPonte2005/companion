@@ -118,6 +118,8 @@ function toReply(comment) {
     content: comment.content,
     createdAt: comment.createdAt,
     ownedByCurrentUser: comment.ownedByCurrentUser,
+    // Quantidade de comentários feitos dentro desta resposta.
+    commentCount: comment.commentCount ?? 0,
     // A API ainda não informa denúncias feitas pela conta.
     reportedByCurrentUser: false,
   }
@@ -143,4 +145,26 @@ export async function deletePost(postId) {
 
 export async function deleteReply(replyId) {
   await api.delete(`/comments/${replyId}`)
+}
+
+// Comentários dentro de uma resposta (complementam ou esclarecem a resposta).
+// Cada item: { id, replyId, author, content, createdAt, ownedByCurrentUser },
+// do mais antigo para o mais novo.
+export const REPLY_COMMENT_MAX_LENGTH = 256
+// Máximo de comentários dentro de uma mesma resposta (igual ao do backend).
+export const MAX_COMMENTS_PER_REPLY = 5
+
+export async function getReplyComments(replyId) {
+  const response = await api.get(`/replies/${replyId}/comments`)
+  return response.data
+}
+
+export async function createReplyComment(replyId, content) {
+  const response = await api.post(`/replies/${replyId}/comments`, { content })
+  return response.data
+}
+
+// O autor apaga o próprio comentário; administração e moderação, qualquer um.
+export async function deleteReplyComment(commentId) {
+  await api.delete(`/reply-comments/${commentId}`)
 }
