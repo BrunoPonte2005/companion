@@ -7,6 +7,16 @@ const RADIUS = (SIZE - STROKE) / 2
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS
 const GAP = 2
 
+// Quais tons do degradê (1 a 5) cada quantidade de setores usa: com poucos
+// setores, tons bem afastados; com 5, a escala toda.
+const RAMP_INDEXES = {
+  1: [0],
+  2: [0, 3],
+  3: [0, 2, 4],
+  4: [0, 1, 3, 4],
+  5: [0, 1, 2, 3, 4],
+}
+
 const numberFormat = new Intl.NumberFormat('pt-BR')
 
 function formatNumber(value) {
@@ -27,6 +37,8 @@ function formatPercent(value, total) {
 // centerLabel: o que o número do centro representa (ex.: "alunos").
 function DonutChart({ title, slices, centerLabel }) {
   const [activeKey, setActiveKey] = useState(null)
+  // Cor de cada setor pela posição dele (a legenda usa a mesma).
+  const colorOf = (index) => `var(--plum-${((RAMP_INDEXES[slices.length] ?? RAMP_INDEXES[5])[index] ?? 4) + 1})`
   const total = slices.reduce((sum, slice) => sum + slice.value, 0)
   const visible = slices.filter((slice) => slice.value > 0)
   const gap = visible.length > 1 ? GAP : 0
@@ -79,7 +91,7 @@ function DonutChart({ title, slices, centerLabel }) {
                   strokeWidth={STROKE}
                   strokeDasharray={`${Math.max(length - gap, 0.5)} ${CIRCUMFERENCE}`}
                   strokeDashoffset={-start}
-                  style={{ stroke: `var(--series-${index + 1})`, opacity: dimmed ? 0.35 : 1 }}
+                  style={{ stroke: colorOf(index), opacity: dimmed ? 0.35 : 1 }}
                   tabIndex={0}
                   aria-label={`${slice.label}: ${formatNumber(slice.value)}`}
                   onMouseEnter={() => setActiveKey(slice.key)}
@@ -122,7 +134,7 @@ function DonutChart({ title, slices, centerLabel }) {
               <span
                 aria-hidden="true"
                 className="size-3 shrink-0 rounded-[4px]"
-                style={{ background: `var(--series-${index + 1})` }}
+                style={{ background: colorOf(index) }}
               />
               <span className="min-w-0 flex-1">
                 <span className="block truncate font-semibold text-companion-text">{slice.label}</span>

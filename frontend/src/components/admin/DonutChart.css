@@ -1,20 +1,23 @@
-/* Cores do gráfico de setores: as 5 primeiras posições da paleta categórica
-   validada (ordem fixa, nunca reordenada). O tema escuro usa passos próprios. */
+/* Cores do gráfico de setores: degradê de ameixa, do tom mais escuro ao mais
+   claro. Com poucos setores o gráfico usa tons bem espaçados da escala (veja
+   RAMP_INDEXES em DonutChart.jsx) para eles se distinguirem. Sem laranja nem
+   azul. O tema escuro usa uma escala mais clara, para aparecer sobre o fundo
+   escuro. A legenda sempre repete nome, valor e porcentagem. */
 .donut-chart {
-  --series-1: #2a78d6;
-  --series-2: #eb6834;
-  --series-3: #1baf7a;
-  --series-4: #eda100;
-  --series-5: #e87ba4;
+  --plum-1: #4a1f5c;
+  --plum-2: #74408a;
+  --plum-3: #9d65b0;
+  --plum-4: #c18fcd;
+  --plum-5: #e0b9e6;
   --donut-track: rgb(0 0 0 / 0.08);
 }
 
 :root[data-theme='dark'] .donut-chart {
-  --series-1: #3987e5;
-  --series-2: #d95926;
-  --series-3: #199e70;
-  --series-4: #c98500;
-  --series-5: #d55181;
+  --plum-1: #8b5a9e;
+  --plum-2: #a373b6;
+  --plum-3: #bb8dcb;
+  --plum-4: #d2a8df;
+  --plum-5: #e6c4ee;
   --donut-track: rgb(255 255 255 / 0.1);
 }
 
