@@ -3,6 +3,7 @@ import { getRememberedUserName } from '../services/userNames.js'
 // Nome de cada tela, usado no link "Voltar" para dizer para onde ele leva.
 // Ao criar uma rota nova em App.jsx, adicione o nome dela aqui.
 const labelsByPath = {
+  '/admin': 'Administração',
   '/feed': 'Feed',
   '/explorar': 'Explorar',
   '/notificacoes': 'Notificações',

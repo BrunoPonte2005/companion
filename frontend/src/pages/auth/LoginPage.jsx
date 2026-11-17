@@ -4,6 +4,7 @@ import AuthForm from '../../features/auth/components/AuthForm.jsx'
 import AuthLayout from '../../layouts/auth/AuthLayout.jsx'
 import { Link, useNavigate } from 'react-router'
 import { useAuth } from '../../hooks/useAuth.js'
+import { homePathFor } from '../../routes/homePath.js'
 import { getApiErrorMessage } from '../../services/apiError.js'
 
 function LoginPage() {
@@ -24,7 +25,9 @@ function LoginPage() {
     setIsSubmitting(true)
     try {
       const session = await login(identifier.trim(), password)
-      navigate(session.user.profileComplete ? '/feed' : '/onboarding/etapa-1', { replace: true })
+      navigate(session.user.profileComplete ? homePathFor(session.user.role) : '/onboarding/etapa-1', {
+        replace: true,
+      })
     } catch (error) {
       setMessage(getApiErrorMessage(error, 'Não foi possível entrar. Tente novamente.'))
     } finally {

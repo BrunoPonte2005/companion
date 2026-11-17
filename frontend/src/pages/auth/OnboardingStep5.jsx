@@ -3,6 +3,7 @@ import {Link, useNavigate} from 'react-router'
 import AuthForm from '../../features/auth/components/AuthForm.jsx'
 import AuthLayout from '../../layouts/auth/AuthLayout.jsx'
 import { useAuth } from '../../hooks/useAuth.js'
+import { homePathFor } from '../../routes/homePath.js'
 import { markTutorialPending } from '../../services/firstAccessTutorial.js'
 import { getApiErrorMessage } from '../../services/apiError.js'
 
@@ -45,7 +46,7 @@ function OnboardingStep5Page() {
       markTutorialPending(user?.id)
       // Fim da criação de perfil: substitui o histórico para que "voltar" no
       // navegador não leve de novo às etapas depois de entrar no feed.
-      navigate('/feed', { replace: true })
+      navigate(homePathFor(user?.role), { replace: true })
     } catch (error) {
       setMessage(getApiErrorMessage(error, 'Não foi possível concluir esta etapa. Tente novamente.'))
     } finally {

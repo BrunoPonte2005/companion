@@ -2,6 +2,7 @@ import { useId, useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import AuthBrand from '../../features/auth/components/AuthBrand.jsx'
 import { useAuth } from '../../hooks/useAuth.js'
+import { homePathFor } from '../../routes/homePath.js'
 
 function HeaderWaves() {
   return (
@@ -195,8 +196,8 @@ function FeedHeader({
           a página e perder o estado da sessão. */}
       <div className="flex min-w-0 items-center gap-2.5">
         <Link
-          to="/feed"
-          aria-label="Companion — Feed"
+          to={homePathFor(userRole)}
+          aria-label={userRole === 'ADMIN' ? 'Companion — Administração' : 'Companion — Feed'}
           className="flex min-w-0 items-center gap-3"
         >
           <AuthBrand compact />

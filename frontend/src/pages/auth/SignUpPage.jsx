@@ -5,6 +5,7 @@ import AuthForm from '../../features/auth/components/AuthForm.jsx'
 import AuthLayout from '../../layouts/auth/AuthLayout.jsx'
 import { validatePassword, validatePasswordConfirmation } from '../../features/auth/passwordValidation.js'
 import { useAuth } from '../../hooks/useAuth.js'
+import { homePathFor } from '../../routes/homePath.js'
 import { getApiErrorMessage } from '../../services/apiError.js'
 
 function validateEmail(value) {
@@ -70,7 +71,9 @@ function RegisterPage() {
     setIsSubmitting(true)
     try {
       const session = await register(email.trim(), password)
-      navigate(session.user.profileComplete ? '/feed' : '/onboarding/etapa-1', { replace: true })
+      navigate(session.user.profileComplete ? homePathFor(session.user.role) : '/onboarding/etapa-1', {
+        replace: true,
+      })
     } catch (error) {
       setMessage(getApiErrorMessage(error, 'Não foi possível criar a conta. Tente novamente.'))
     } finally {
