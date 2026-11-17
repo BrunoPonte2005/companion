@@ -11,6 +11,8 @@ public record PostCommentResponseDTO(
         UserSummaryResponseDTO author,
         String content,
         LocalDateTime createdAt,
-        boolean ownedByCurrentUser
+        boolean ownedByCurrentUser,
+        /** Comentários feitos dentro desta resposta. */
+        long commentCount
 ) {
 }

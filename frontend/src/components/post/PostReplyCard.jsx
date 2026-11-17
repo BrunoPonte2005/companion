@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import DeleteReplyButton from './DeleteReplyButton.jsx'
 import { usePostActions } from '../../hooks/usePostActions.js'
 import ProfileLink from '../user/ProfileLink.jsx'
+import ReplyComments from './ReplyComments.jsx'
 import ReportPopup from './ReportPopup.jsx'
 
 function initials(name) {
@@ -36,6 +37,9 @@ function PostReplyCard({
 }) {
   const [isReported, setIsReported] = useState(reply.reportedByCurrentUser)
   const [isReportOpen, setIsReportOpen] = useState(false)
+  // Comentários dentro da resposta: abrem sob demanda; o contador vem da API.
+  const [isCommentsOpen, setIsCommentsOpen] = useState(false)
+  const [commentCount, setCommentCount] = useState(reply.commentCount ?? 0)
   const { canModerate } = usePostActions()
   // O autor exclui a própria resposta; administração e moderação, qualquer uma.
   const canDelete = Boolean(onDelete) && (reply.ownedByCurrentUser || canModerate)
@@ -106,9 +110,24 @@ function PostReplyCard({
             {reply.content}
           </p>
 
-          {/* Ninguém denuncia a própria resposta (o backend também recusa). */}
-          {(!reply.ownedByCurrentUser || canDelete) && (
-            <div className="mt-4 flex items-center justify-end gap-5 text-sm">
+          <div className="mt-4 flex items-center gap-5 text-sm">
+            <button
+              type="button"
+              onClick={() => setIsCommentsOpen((open) => !open)}
+              aria-expanded={isCommentsOpen}
+              aria-label={
+                isCommentsOpen ? 'Ocultar comentários da resposta' : `Ver ou fazer comentários (${commentCount})`
+              }
+              className={`inline-flex items-center gap-2 transition-colors ${
+                isCommentsOpen ? 'text-companion-brand' : 'text-companion-muted hover:text-companion-brand'
+              }`}
+            >
+              <i className={`bi ${isCommentsOpen ? 'bi-chat-fill' : 'bi-chat'}`} aria-hidden="true" />
+              {commentCount > 0 ? `Comentários (${commentCount})` : 'Comentar'}
+            </button>
+
+            {/* Ninguém denuncia a própria resposta (o backend também recusa). */}
+            <div className="ml-auto flex items-center gap-5">
               {!reply.ownedByCurrentUser && (
               <button
                 type="button"
@@ -131,6 +150,14 @@ function PostReplyCard({
               )}
               {canDelete && <DeleteReplyButton reply={reply} onDelete={onDelete} />}
             </div>
+          </div>
+
+          {isCommentsOpen && (
+            <ReplyComments
+              replyId={reply.id}
+              currentUserId={currentUserId}
+              onCountChange={setCommentCount}
+            />
           )}
         </div>
       </div>
