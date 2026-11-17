@@ -117,7 +117,7 @@ function PostCard({
 
   return (
     <>
-      <article className="rounded-2xl border border-companion-border/70 bg-companion-surface p-5 shadow-[0_8px_24px_rgba(69,42,18,0.06)] sm:p-6">
+      <article data-tour="post-card" className="rounded-2xl border border-companion-border/70 bg-companion-surface p-5 shadow-[0_8px_24px_rgba(69,42,18,0.06)] sm:p-6">
         <div className="flex gap-4">
         <ProfileLink
           user={post.author}
@@ -267,7 +267,7 @@ function PostContent({ post, subjects, detailsHref, currentUserId }) {
   return (
     <>
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <div className="text-sm font-semibold text-companion-text">
+        <div data-tour="post-author" className="text-sm font-semibold text-companion-text">
           <ProfileLink
             user={post.author}
             currentUserId={currentUserId}
@@ -313,7 +313,7 @@ function PostBody({ post, subjects }) {
         {post.content}
       </p>
 
-      <ul className="mt-4 flex flex-wrap gap-2" aria-label="Conteúdos">
+      <ul data-tour="post-tags" className="mt-4 flex flex-wrap gap-2" aria-label="Conteúdos">
         {subjects.map((subject) => (
           <li key={subject.id}>
             <SubjectTag name={subject.name} />

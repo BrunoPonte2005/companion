@@ -3,6 +3,7 @@ import {Link, useNavigate} from 'react-router'
 import AuthForm from '../../features/auth/components/AuthForm.jsx'
 import AuthLayout from '../../layouts/auth/AuthLayout.jsx'
 import { useAuth } from '../../hooks/useAuth.js'
+import { markTutorialPending } from '../../services/firstAccessTutorial.js'
 import { getApiErrorMessage } from '../../services/apiError.js'
 
 // Mesmo limite do backend (UserProfileUpdateRequestDTO).
@@ -40,6 +41,8 @@ function OnboardingStep5Page() {
         await updateProfile({ bio: newBio })
       }
       await completeOnboarding()
+      // O tutorial de primeiro acesso aparece ao entrar no feed.
+      markTutorialPending(user?.id)
       // Fim da criação de perfil: substitui o histórico para que "voltar" no
       // navegador não leve de novo às etapas depois de entrar no feed.
       navigate('/feed', { replace: true })

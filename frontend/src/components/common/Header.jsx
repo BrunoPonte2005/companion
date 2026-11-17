@@ -250,6 +250,7 @@ function FeedHeader({
         <button
           type="button"
           onClick={onPostQuestion}
+          data-tour="post-button"
           className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-companion-orange px-3 text-sm font-bold text-white shadow-companion-btn transition hover:bg-companion-orange-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-companion-orange sm:px-5"
         >
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="size-5">

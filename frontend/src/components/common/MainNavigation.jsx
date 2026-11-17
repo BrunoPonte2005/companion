@@ -5,7 +5,7 @@ function MainNavigation({ items }) {
     'flex items-center gap-3.5 rounded-xl px-4 py-3.5 text-lg font-semibold transition-colors'
 
   return (
-    <nav aria-label="Navegação principal">
+    <nav aria-label="Navegação principal" data-tour="nav">
       <ul className="flex flex-wrap gap-1 lg:flex-col">
         {items.map(({ to, label, icon, end, badge }) => (
           <li key={label} className="min-w-fit flex-1 lg:flex-none">

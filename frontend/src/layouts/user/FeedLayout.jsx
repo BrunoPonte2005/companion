@@ -4,6 +4,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import Background from '../../components/common/Background.jsx'
 import FeedHeader from '../../components/common/Header.jsx'
 import MainNavigation from '../../components/common/MainNavigation.jsx'
+import FirstAccessTutorial from '../../components/common/FirstAccessTutorial.jsx'
 import PostComposerModal from '../../components/post/PostComposerModal.jsx'
 import PostDetailModal from '../../components/post/PostDetailModal.jsx'
 import { PostActionsContext } from '../../contexts/postActionsContext.js'
@@ -285,6 +286,7 @@ function FeedLayout() {
           onReportItem={reportItem}
         />
       )}
+      <FirstAccessTutorial userId={user?.id} />
       {isComposerOpen && (
         <PostComposerModal
           subjects={composerSubjects?.list ?? null}
