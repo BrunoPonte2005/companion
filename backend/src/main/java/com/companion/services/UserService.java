@@ -103,7 +103,7 @@ public class UserService {
                             .add(link.getSubject().getName()));
         }
         return PageResponse.from(users.map(user -> new UserSearchResultDTO(
-                user.getId(), user.getName(), user.getUsername(), user.getAvatarUrl(), courseName(user),
+                user.getId(), user.getName(), user.getUsername(), AvatarImageService.publicUrl(user.getAvatarUrl()), courseName(user),
                 dominated.getOrDefault(user.getId(), List.of()))));
     }
 
@@ -226,7 +226,7 @@ public class UserService {
 
     public UserAccountResponseDTO toAccount(User user) {
         return new UserAccountResponseDTO(
-                user.getId(), user.getEmail(), user.getName(), user.getUsername(), user.getAvatarUrl(),
+                user.getId(), user.getEmail(), user.getName(), user.getUsername(), AvatarImageService.publicUrl(user.getAvatarUrl()),
                 user.getBio(), user.getBannerStyle(), user.getBannerColor(), user.getRegistrationNumber(),
                 courseId(user), courseName(user), universityId(user), universityName(user), user.getSemester(),
                 user.getRole(), user.getStatus(), user.isProfileComplete(), user.getOnboardingCompletedAt(),
@@ -235,7 +235,7 @@ public class UserService {
     }
 
     public UserSummaryResponseDTO toSummary(User user) {
-        return new UserSummaryResponseDTO(user.getId(), user.getName(), user.getUsername(), user.getAvatarUrl());
+        return new UserSummaryResponseDTO(user.getId(), user.getName(), user.getUsername(), AvatarImageService.publicUrl(user.getAvatarUrl()));
     }
 
     private User findAnyUser(Long id) {
@@ -263,7 +263,7 @@ public class UserService {
 
     private UserPublicResponseDTO toPublic(User user, long posts, long comments, long followers, long following) {
         return new UserPublicResponseDTO(
-                user.getId(), user.getName(), user.getUsername(), user.getAvatarUrl(), user.getBio(),
+                user.getId(), user.getName(), user.getUsername(), AvatarImageService.publicUrl(user.getAvatarUrl()), user.getBio(),
                 user.getBannerStyle(), user.getBannerColor(),
                 courseId(user), courseName(user), universityId(user), universityName(user), user.getSemester(),
                 posts, comments, followers, following,

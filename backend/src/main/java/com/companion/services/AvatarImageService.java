@@ -5,6 +5,7 @@ import com.companion.exceptions.BadRequestException;
 import com.companion.repositories.UserAvatarRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -39,12 +40,21 @@ public class AvatarImageService {
         }
         userAvatarRepository.save(avatar);
 
+        // Guarda só o caminho; o endereço completo é montado em publicUrl ao responder.
         // O parâmetro "v" muda a cada envio para o navegador não mostrar a foto antiga em cache.
-        return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/users/{id}/avatar")
-                .queryParam("v", System.currentTimeMillis())
-                .buildAndExpand(userId)
-                .toUriString();
+        return "/api/users/" + userId + "/avatar?v=" + System.currentTimeMillis();
+    }
+
+    /**
+     * Completa um caminho guardado (/api/users/{id}/avatar...) com o endereço em que
+     * a API está respondendo. Endereços que já são completos voltam como estão.
+     */
+    public static String publicUrl(String storedUrl) {
+        if (storedUrl == null || !storedUrl.startsWith("/")
+                || RequestContextHolder.getRequestAttributes() == null) {
+            return storedUrl;
+        }
+        return ServletUriComponentsBuilder.fromCurrentContextPath().toUriString() + storedUrl;
     }
 
     @Transactional(readOnly = true)

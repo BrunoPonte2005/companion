@@ -52,7 +52,15 @@ class SeedMigrationTest {
         long anaId = jdbc.queryForObject(
                 "SELECT id FROM users WHERE email = 'ana.exemplo@edu.unifor.br'", Long.class);
         String avatarUrl = jdbc.queryForObject("SELECT avatar_url FROM users WHERE id = ?", String.class, anaId);
-        assertTrue(avatarUrl.endsWith("/api/users/" + anaId + "/avatar?v=2"));
+        // A V4 deixa só o caminho no banco; a API completa com o próprio endereço.
+        assertEquals("/api/users/" + anaId + "/avatar?v=2", avatarUrl);
+        String token = mockMvc.perform(post("/api/auth/login").contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"identifier\":\"ana.exemplo@edu.unifor.br\",\"password\":\"Senha123\"}"))
+                .andReturn().getResponse().getContentAsString()
+                .replaceAll(".*\"accessToken\":\"([^\"]+)\".*", "$1");
+        mockMvc.perform(get("/api/users/" + anaId).header("Authorization", "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.avatarUrl").value("http://localhost/api/users/" + anaId + "/avatar?v=2"));
 
         // O endereço é público e devolve o JPEG gravado pela migração.
         byte[] photo = mockMvc.perform(get("/api/users/" + anaId + "/avatar"))
